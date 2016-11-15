@@ -8,6 +8,15 @@ var bodyParser = require('body-parser');
 //==============================================================================
 /* TODO -> Connect to DB */
 var mongoose = require('mongoose');
+var uri =  'mongodb://jyoon:helloavery@ds139267.mlab.com:39267/cpsc473'
+mongoose.connect(uri);
+
+// Create schema for questions
+var QuestionSchema = mongoose.Schema({
+    'question': String, 
+    'answerID': String
+});
+var Question = mongoose.model('Question', QuestionSchema);
 
 //==============================================================================
 
@@ -16,8 +25,6 @@ var mongoose = require('mongoose');
 //==============================================================================
 
 var io = require('socket.io').listen(server);
-
-
 
 
 var app = express();
@@ -29,6 +36,19 @@ server.listen(process.env.PORT || 3000);
 
 app.get('/', function(req,res){
     res.sendFile(__dirname + '/index.html')
+});
+
+// Retrieves a question from the database
+app.get('/question', function(req, res) {
+    'use strict';
+
+    var randomNum = Math.floor((Math.random() * 3) +1);
+
+    Question.findOne({answerID: randomNum}, function(err, q) {
+        if (err) console.log(err);
+
+        res.json(q);
+    });
 });
     
 io.sockets.on('connection', function(socket){
