@@ -12,7 +12,7 @@ var mongoose = require('mongoose');
 //==============================================================================
 
 
-var store = require('./routes/store');
+
 //==============================================================================
 
 var io = require('socket.io').listen(server);
@@ -28,7 +28,7 @@ connections = [];
 server.listen(process.env.PORT || 3000);
 
 app.get('/', function(req,res){
-    res.sendFile(__dirname + '/index.html'
+    res.sendFile(__dirname + '/index.html')
 });
     
 io.sockets.on('connection', function(socket){
@@ -40,7 +40,7 @@ io.sockets.on('connection', function(socket){
         users.splice(users.indexOf(socket.username),1);
         updateUsernames();
     connections.splice(connections.indexOf(socket),1)
-    console.log('Disconnected: %s sockets connected'connections.length);
+    console.log('Disconnected: %s sockets connected', connections.length);
     });
    
     //send answer
